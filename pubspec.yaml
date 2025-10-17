@@ -6,9 +6,6 @@ topics:
   - logging
   - opentelemetry
 
-environment:
-  sdk: ^3.6.0
-
 dependencies:
   fixnum: ^1.1.1
   grpc: ^4.0.1
