@@ -44,31 +44,32 @@ class OpenTelemetryLogger {
   /// Logs a debug message. [log] will be serialized to string using [toString].
   /// The [traceId] can be used to associate the log with a specific trace. If
   /// not provided, the logger's default traceId will be used.
-  void debug(Object? log, {String? traceId}) =>
+  void debug(Object? log, {String? traceId, Map<String, String>? attributes}) =>
       _add(LogLevel.debug, log, traceId: traceId ?? _traceId);
 
   /// Logs an error message. [log] will be serialized to string using [toString].
   /// The [traceId] can be used to associate the log with a specific trace. If
   /// not provided, the logger's default traceId will be used.
-  void error(Object? log, {String? traceId}) =>
+  void error(Object? log, {String? traceId, Map<String, String>? attributes}) =>
       _add(LogLevel.error, log, traceId: traceId ?? _traceId);
 
   /// Logs an info message. [log] will be serialized to string using [toString].
   /// The [traceId] can be used to associate the log with a specific trace. If
   /// not provided, the logger's default traceId will be used.
-  void info(Object? log, {String? traceId}) =>
+  void info(Object? log, {String? traceId, Map<String, String>? attributes}) =>
       _add(LogLevel.info, log, traceId: traceId ?? _traceId);
 
   /// Logs a warning message. [log] will be serialized to string using [toString].
   /// The [traceId] can be used to associate the log with a specific trace. If
   /// not provided, the logger's default traceId will be used.
-  void warn(Object? log, {String? traceId}) =>
+  void warn(Object? log, {String? traceId, Map<String, String>? attributes}) =>
       _add(LogLevel.warn, log, traceId: traceId ?? _traceId);
 
   void _add(
     LogLevel level,
     Object? message, {
     required String? traceId,
+    required Map<String, String>? attributes,
   }) {
     if (traceId != null && traceId.length != 32) {
       throw ArgumentError.value(
@@ -82,7 +83,7 @@ class OpenTelemetryLogger {
         level,
         message?.toString(),
         traceId: traceId,
-        attributes: _attributes,
+        attributes: {}..addAll(_attributes)..addAll(attributes ?? {}),
       ),
     );
     if (_batch.length >= _batchSize) {
